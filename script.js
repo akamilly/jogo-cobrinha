@@ -1,5 +1,5 @@
 //Play Board = tela ou tabuleiro
-const playBoard = documento.querySelector(".play-board");
+const playBoard = document.querySelector(".play-board");
 
 //Pontuação do jogo
 const scoreElement = document.querySelector(".score");
@@ -37,7 +37,7 @@ let score = 0;
 let highScore = localStorage.getItem("high-score") || 0;
 
 //Posição aleatoria para a comida
-const updataFoodPosition = () => {
+const updateFoodPosition = () => {
     foodX = Math.floor(Math.random() * 30) + 1;
     foodY = Math.floor(Math.random() * 30) + 1;
 }
@@ -71,10 +71,10 @@ controls.forEach(button => button.addEventListener ("click", () => changeDirecti
 //Iniciar o game = initgame
 const initGame = () => {
     if (gameOver) return handleGameOver();
-    let html = `<div class="food" style="grid-area: ${foodY} / ${foodX}"`;
+    let html = `<div class="food" style="grid-area: ${foodY} / ${foodX}"></div>`;
 
     //Quando a cobra se alimenta
-    if (snakeX === foodX && snakeY === foodY ===) {
+    if (snakeX === foodX && snakeY === foodY) {
         updateFoodPosition();
         snakeBody.push([foodY, foodX]);
         score++;
@@ -97,4 +97,19 @@ const initGame = () => {
     if (snakeX <= 0 || snakeX > 30 || snakeY <=0 || snakeY <= 0 || snakeY > 30) {
         return gameOver = true; 
     }
+
+    //add div para cada parte do corpo da cobra 
+    for (let i = 0; i <snakeBody.length; i++) {
+        html += `<div class="head" style="grid-area: ${snakeBody[i][1]} / ${snakeBody[i][0]}"></div>`;
+
+        //Verifica se a cabeça da cobra atingiu ou colidiu a cabeça com o corpo
+        if (i !== 0 && snakeBody[0][1] === snakeBody[i][1] && snakeBody[0][0] === snakeBody[i][0]) {
+            gameOver = true;
+        } 
+        playBoard.innerHTML = html;
+    }
 }
+
+updateFoodPosition();
+setIntervalId = setInterval(initGame, 100);
+document.addEventListener("keyup", changeDirection);
